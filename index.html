@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" 
+        content="width=device-width,initial-scale=1.0">
+        <title> skycast-天气仪表盘 </title>
+        <!-- 添加网站图标 -->
+        <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 640'%3E%3Cpath fill='%23FFD43B' d='M485.6 49.2C490.5 51.2 494.1 55.6 495.1 60.8L512 144L595.2 160.8C600.4 161.9 604.7 165.4 606.8 170.3C608.9 175.2 608.3 180.8 605.4 185.2L558.5 255.9L605.4 326.6C608.3 331 608.9 336.6 606.8 341.5C604.7 346.4 600.4 350 595.2 351L533 363.7C521.1 355 507.9 348.1 493.6 343.3C491.1 330.6 486.8 318.6 480.9 307.6C490.4 292.7 496 275 496 255.9C496 202.9 453 159.9 400 159.9C352.1 159.9 312.4 195 305.2 240.8C278.7 220.5 245.7 208.3 209.8 207.9L194.7 185.2C191.8 180.8 191.2 175.2 193.3 170.3C195.4 165.4 199.7 161.8 204.9 160.8L288 144L304.8 60.8C305.9 55.6 309.4 51.3 314.3 49.2C319.2 47.1 324.8 47.7 329.2 50.6L400 97.6L470.7 50.7C475.1 47.8 480.7 47.2 485.6 49.3zM448 256C448 259.8 447.6 263.5 446.7 267.1C425 250.1 397.7 240 368 240C363.4 240 358.9 240.2 354.5 240.7C360.9 221.7 378.9 208 400 208C426.5 208 448 229.5 448 256zM128 576C75 576 32 533 32 480C32 437.5 59.6 401.4 97.9 388.8C96.6 382.1 96 375.1 96 368C96 306.1 146.1 256 208 256C251.1 256 288.5 280.3 307.2 316C321.9 298.9 343.7 288 368 288C412.2 288 448 323.8 448 368C448 373.5 447.4 378.8 446.4 384C446.9 384 447.5 384 448 384C501 384 544 427 544 480C544 533 501 576 448 576L128 576z'/%3E%3C/svg%3E" type="image/svg+xml">
+        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="css/all.min.css">
+        <link rel="stylesheet" href="css/qweather-icons.css">
+        <!-- 使用本地Chart.js文件 -->
+        <script src="js/chart.umd.min.js"></script>        
+        <!-- 用于实现保存为图片和PDF功能的本地库 -->
+        <script src="js/html2canvas.min.js"></script>
+        <script src="js/jspdf.umd.min.js"></script>
+    </head>
+    <body>
+        <!-- 分享卡片生成容器 - 隐藏，仅用于生成分享图片 -->
+        <div id="share-card-container" class="share-card-container" style="display: none;">
+            <div class="share-card">
+                <div class="share-card-header">
+                    <h2 id="share-city-name">城市名称</h2>
+                    <p id="share-date">日期</p>
+                </div>
+                <div class="share-card-main">
+                    <div class="share-icon" id="share-icon">
+                        <i class="fas fa-sun"></i>
+                    </div>
+                    <div class="share-temp" id="share-temp">--°C</div>
+                    <div class="share-desc" id="share-desc">天气描述</div>
+                </div>
+                <div class="share-card-footer">
+                    <p class="warm-message" id="warm-message">暖心留言</p>
+                    <p class="share-footer-text">来自 WeatherWave 天气应用</p>
+                </div>
+            </div>
+        </div>
+
+        <!--图片预览界面 -->
+        <div id="image-preview-modal" class="image-preview-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>分享卡片预览</h2>
+                    <button id="close-preview" class="close-btn">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <div class="preview-container">
+                    <!-- 预览卡片 -->
+                    <div id="preview-card" class="share-card">
+                        <div class="share-card-header">
+                            <h2 id="preview-city-name">城市名称</h2>
+                            <p id="preview-date">日期</p>
+                        </div>
+                        <div class="share-card-main">
+                            <div class="share-icon" id="preview-icon">
+                                <i class="fas fa-sun"></i>
+                            </div>
+                            <div class="share-temp" id="preview-temp">--°C</div>
+                            <div class="share-desc" id="preview-desc">天气描述</div>
+                        </div>
+                        <div class="share-card-footer">
+                            <p class="warm-message" id="preview-warm-message">暖心留言</p>
+                            <p class="share-footer-text">来自 WeatherWave 天气应用</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="preview-controls">
+                    <div class="control-row">
+                        <!-- 背景切换控制 - 只保留随机切换 -->
+                        <div class="control-group inline">
+                            <div class="bg-controls">
+                                <button id="random-bg" class="bg-btn"><i class="fas fa-random"></i> 切换背景</button>
+                            </div>
+                        </div>
+                        
+                        <!-- 暖心留言切换控制 - 只保留随机切换 -->
+                        <div class="control-group inline">
+                            <div class="message-controls">
+                                <button id="random-message" class="message-btn"><i class="fas fa-random"></i> 切换留言</button>
+                            </div>
+                        </div>
+                        
+                        <!-- 保存图片按钮 -->
+                        <div class="control-group inline">
+                            <div class="save-controls">
+                                <button id="save-image-btn" class="save-btn"><i class="fas fa-save"></i> 保存图片</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 天气预警弹窗 -->
+        <div id="warning-modal" class="warning-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>天气预警</h2>
+                    <button id="close-warning" class="close-btn">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <div class="warning-modal-content">
+                    <!-- 预警信息容器 -->
+                    <div id="warning-content" class="warning-content"></div>
+                    
+                    <!-- 预警切换按钮 -->
+                    <div id="warning-nav" class="warning-nav"></div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <!--加载指示器-->
+            <div id="loading-overlay" class="loading-overlay">
+                <div class="loading-spinner">
+                    <i class="fas fa-circle-notch fa-spin"></i>
+                    <span>正在加载...</span>
+                </div>
+            </div>
+            
+            <!--顶部：搜索栏和位置信息-->
+            <header class="header">
+                <div class="location-display">
+                    <i class="fas fa-map-marker-dot"></i>
+                    <span id="city-name"> 正在获取位置... </span>
+                </div>
+                <div class="search-box">
+                    <div class="search-container">
+                        <input type="text" id="city-input" placeholder="输入城市名称...">
+                        <button id="locate-btn" class="search-inner-btn" title="获取当前位置">
+                            <i class="fas fa-location-arrow"></i>
+                        </button>
+                        <!-- 统一的搜索结果/历史记录容器 -->
+                        <div id="search-results" class="search-dropdown">
+                            <!-- 搜索历史列表 -->
+                            <div id="search-history" class="search-section"></div>
+                            <!-- 搜索结果列表 -->
+                            <div id="city-selection" class="search-section"></div>
+                        </div>
+                    </div>
+                    <div class="search-buttons">
+                        <button id="search-btn">
+                            <i class="fas fa-search"></i>
+                        </button>
+                        <button id="history-btn" title="搜索历史">
+                            <i class="fas fa-history"></i>
+                        </button>
+                        <button id="share-btn" class="search-btn" title="分享天气">
+                            <i class="fas fa-share-alt"></i>
+                        </button>
+                        <!-- 分享选项弹出菜单 -->
+                        <div id="share-options" class="share-options">
+                            <div class="share-option" data-action="save-image">
+                                <i class="fas fa-image"></i>
+                                <span>生成分享卡片</span>
+                            </div>
+                            <div class="share-option" data-action="show-preview">
+                                <i class="fas fa-eye"></i>
+                                <span>显示网页预览</span>
+                            </div>
+                            <div class="share-option" data-action="save-pdf">
+                                <i class="fas fa-file-pdf"></i>
+                                <span>保存为PDF</span>
+                            </div>
+                            <div class="share-option" data-action="browser-share">
+                                <i class="fas fa-share-square"></i>
+                                <span>浏览器分享</span>
+                            </div>
+                            <div class="share-option" data-action="copy-link">
+                                <i class="fas fa-link"></i>
+                                <span>复制链接</span>
+                            </div>
+                            <div class="share-option" data-action="copy-text">
+                                <i class="fas fa-copy"></i>
+                                <span>复制文本</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            <!--主内容区-->
+            <main class="dashboard">
+                <!--左侧：当前天气预览-->
+                <section class="current-weather">
+                    <div class="weather-card main-card">
+                        <div class="weather-header">
+                            <div class="weather-title"><i class="fas fa-cloud-sun"></i> 实时天气</div>
+                            <div id="current-date" class="current-date"> -- </div>
+                        </div>
+                        <div class="weather-icon" id="main-icon">
+                            <i class="fas fa-sun"></i>
+                        </div>
+                        <div class="temp-desc-container">
+                            <div class="temperture">
+                    <h1 id="current-temp"> --°C </h1>
+                </div>
+                            <div class="weather-desc-right">
+                                <p id="weather-desc"> -- </p>
+                            </div>
+                        </div>
+                        <div class="details-container">
+                            <div class="details">
+                                <div class="detail-item">
+                                    <i class="fas fa-temperature-high"></i>
+                                    <span id="feels-like"> 体感温度--°C </span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-tint"></i>
+                                    <span id="humidity"> 湿度--% </span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-wind"></i>
+                                    <span id="wind-speed"> 风速--m/s </span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-gauge"></i>
+                                    <span id="pressure"> 气压--hPa </span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-sun"></i>
+                                    <span id="sunrise"> 日出：-- </span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-moon"></i>
+                                    <span id="sunset"> 日落：-- </span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-eye"></i>
+                                    <span id="visibility"> 能见度：--米 </span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-cloud"></i>
+                                    <span id="clouds"> 云量：--% </span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-compass"></i>
+                                    <span id="windDir"> 风向：-- </span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-wind"></i>
+                                    <span id="windScale"> 风力：--级 </span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-tint-slash"></i>
+                                    <span id="precip"> 降水量：--mm </span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-snowflake"></i>
+                                    <span id="dew"> 露点温度：--°C </span>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!--右侧：未来天气预测-->
+                <section class="forecast-section">
+                    <div class="forecast-container">
+                        <h2 class="card-title"><i class="fas fa-calendar-days"> </i>未来5天预报</h2>
+                        <div class="forecast-days" id="forecast-list">
+                        </div>
+                    </div>
+                        <!-- 预报卡片将通过JS生成 -->
+                    <div class="chart-container">
+                        <div class="chart-header">
+                            <h2><i class="fas fa-chart-line"></i> <span id="chart-title">温度趋势</span></h2>
+                            <div class="chart-controls">
+                                <button class="chart-tab active" data-trend="temperature">温度</button>
+                                <button class="chart-tab" data-trend="precipitation">降水</button>
+                                <button class="chart-tab" data-trend="humidity">湿度</button>
+                                <button class="chart-tab" data-trend="pressure">气压</button>
+                                <button class="chart-tab" data-trend="visibility">能见度</button>
+                            </div>
+                        </div>
+                        <canvas id="temperture-chart"></canvas>
+                    </div>
+                </section>
+            </main>
+            <!--生活指数区域-->            
+            <div class="life-indices full-width">
+                <h2><i class="fas fa-heartbeat"></i> 生活指数</h2>
+                <div class="indices-container" id="life-indices">
+                    <!--生活指数卡片将通过JS生成-->
+                </div>
+            </div>
+            
+            <!--逐小时预报区域-->
+            <div class="hourly-forecast full-width">
+                <h2><i class="fas fa-clock"></i> 24小时预报</h2>
+                <div class="hourly-container" id="hourly-forecast">
+                    <!--逐小时预报卡片将通过JS生成-->
+                </div>
+            </div>
+            <!--底部：API信息-->
+            <footer class="footer">
+                <div class="api-card">
+                    <p> 天气数据来源：<a href="https://dev.qweather.com/"  target="_blank" >@和风天气</a> 最后更新: <span id="update-time"> -- </span></p>
+                </div>
+            </footer>
+        </div>
+        <script src="script.js"> </script>
+    </body>
+</html>
