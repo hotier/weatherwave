@@ -1171,11 +1171,23 @@ function updateTrendChart(trendType) {
     }
     
     // 检查Chart是否可用
+    let Chart = window.Chart;
     if (typeof Chart === 'undefined') {
-        console.warn('Chart.js未加载，无法显示图表');
-        // 清空图表容器
-        const ctx = DOM_ELEMENTS.tempChart.getContext('2d');
-        ctx.clearRect(0, 0, DOM_ELEMENTS.tempChart.width, DOM_ELEMENTS.tempChart.height);
+        // 尝试从CDN加载Chart.js
+        console.warn('Chart.js未加载，尝试动态加载...');
+        const script = document.createElement('script');
+        script.src = 'https://cdn.jsdelivr.net/npm/chart.js';
+        script.onload = () => {
+            Chart = window.Chart;
+            updateTrendChart(trendType);
+        };
+        script.onerror = () => {
+            console.error('Chart.js加载失败，无法显示图表');
+            // 清空图表容器
+            const ctx = DOM_ELEMENTS.tempChart.getContext('2d');
+            ctx.clearRect(0, 0, DOM_ELEMENTS.tempChart.width, DOM_ELEMENTS.tempChart.height);
+        };
+        document.head.appendChild(script);
         return;
     }
     
