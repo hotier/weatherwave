@@ -22,6 +22,9 @@ body{
    box-shadow: 0 15px 30px rgba(0,0,0,0.3);
    border-radius: 20px;
    overflow-x: hidden;
+   min-height: calc(100vh - 40px);
+   display: flex;
+   flex-direction: column;
 }
 
 /*头部样式*/
@@ -397,79 +400,158 @@ body{
     background-repeat: no-repeat;
 }
 
-/* 不同天气状况的背景渐变 */
-/* 晴天背景 */
-.share-card.sunny {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), linear-gradient(135deg, #ffcc00 0%, #ff9900 100%);
+/* 不同天气状况的背景图片 */
+/* 晴天背景 - 实况风景图 */
+.share-card.sunny, .share-card.sunny-1 {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('images/sunny.jpg');
+    background-size: cover;
+    background-position: center;
 }
 
 .share-card.sunny-2 {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), linear-gradient(135deg, #ffeb3b 0%, #ff9800 100%);
+    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('images/sunny-2.jpg');
+    background-size: cover;
+    background-position: center;
 }
 
 .share-card.sunny-3 {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), linear-gradient(135deg, #fff9c4 0%, #ffb74d 100%);
+    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('images/sunny-3.jpg');
+    background-size: cover;
+    background-position: center;
 }
 
-/* 多云背景 */
-.share-card.cloudy {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), linear-gradient(135deg, #e0e0e0 0%, #90caf9 100%);
+.share-card.sunny-4 {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('images/sunny-4.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+/* 多云背景 - 实况风景图 */
+.share-card.cloudy, .share-card.cloudy-1 {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('images/cloudy.jpg');
+    background-size: cover;
+    background-position: center;
 }
 
 .share-card.cloudy-2 {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), linear-gradient(135deg, #f5f5f5 0%, #bbdefb 100%);
+    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('images/cloudy-2.jpg');
+    background-size: cover;
+    background-position: center;
 }
 
 .share-card.cloudy-3 {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), linear-gradient(135deg, #d7ccc8 0%, #b3e5fc 100%);
+    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('images/cloudy-3.jpg');
+    background-size: cover;
+    background-position: center;
 }
 
-/* 雨天背景 */
-.share-card.rainy {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), linear-gradient(135deg, #2196f3 0%, #607d8b 100%);
+.share-card.cloudy-4 {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('images/cloudy-4.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+/* 雨天背景 - 实况风景图 */
+.share-card.rainy, .share-card.rainy-1 {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('images/rainy.jpg');
+    background-size: cover;
+    background-position: center;
 }
 
 .share-card.rainy-2 {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), linear-gradient(135deg, #1976d2 0%, #455a64 100%);
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('images/rainy-2.jpg');
+    background-size: cover;
+    background-position: center;
 }
 
 .share-card.rainy-3 {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), linear-gradient(135deg, #64b5f6 0%, #78909c 100%);
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('images/rainy-3.jpg');
+    background-size: cover;
+    background-position: center;
 }
 
-/* 雪天背景 */
-.share-card.snowy {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), linear-gradient(135deg, #ffffff 0%, #e0e0e0 100%);
+.share-card.rainy-4 {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('images/rainy-4.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+/* 雪天背景 - 实况风景图 */
+.share-card.snowy, .share-card.snowy-1 {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('images/snowy.jpg');
+    background-size: cover;
+    background-position: center;
 }
 
 .share-card.snowy-2 {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), linear-gradient(135deg, #f5f5f5 0%, #bdbdbd 100%);
+    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('images/snowy-2.jpg');
+    background-size: cover;
+    background-position: center;
 }
 
 .share-card.snowy-3 {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), linear-gradient(135deg, #ffffff 0%, #cccccc 100%);
+    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('images/snowy-3.jpg');
+    background-size: cover;
+    background-position: center;
 }
 
-/* 默认背景 */
-.share-card.default {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), linear-gradient(135deg, #3f51b5 0%, #9c27b0 100%);
+.share-card.snowy-4 {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('images/snowy-4.jpg');
+    background-size: cover;
+    background-position: center;
 }
 
-.share-card.default-2 {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), linear-gradient(135deg, #673ab7 0%, #e91e63 100%);
+/* 阴天背景 - 实况风景图 */
+.share-card.overcast, .share-card.overcast-1 {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('images/overcast.jpg');
+    background-size: cover;
+    background-position: center;
 }
 
-.share-card.default-3 {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), linear-gradient(135deg, #9c27b0 0%, #f44336 100%);
+.share-card.overcast-2 {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('images/overcast-2.jpg');
+    background-size: cover;
+    background-position: center;
 }
 
-.share-card.default-4 {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), linear-gradient(135deg, #2196f3 0%, #e91e63 100%);
+.share-card.overcast-3 {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('images/overcast-3.jpg');
+    background-size: cover;
+    background-position: center;
 }
 
-.share-card.default-5 {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), linear-gradient(135deg, #00bcd4 0%, #ff4081 100%);
+.share-card.overcast-4 {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('images/overcast-4.jpg');
+    background-size: cover;
+    background-position: center;
 }
+
+/* 雾/霾天背景 - 实况风景图 */
+.share-card.foggy, .share-card.foggy-1 {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('images/foggy.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.share-card.foggy-2 {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('images/foggy-2.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.share-card.foggy-3 {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('images/foggy-3.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.share-card.foggy-4 {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('images/foggy-4.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+
 
 .share-card-header {
     position: absolute;
@@ -790,18 +872,19 @@ body{
     grid-template-columns: 1.2fr 1.8fr;
     gap: 30px;
     margin-bottom: 30px;
-    max-height: 100%;
+    max-height: none;
     overflow: visible;
     align-items: stretch;
+    flex-grow: 1;
 }
 
-/* Keep consistent gap between sections and ensure same height */
+/* Keep consistent gap between sections */
 .forecast-section,
 .current-weather{
     display: flex;
     flex-direction: column;
     gap: 30px;
-    height: 100%;
+    height: auto;
 }
 
 /* Make weather card fill the entire current-weather section */
@@ -823,8 +906,8 @@ body{
     display: flex;
     flex-direction: column;
     gap: 30px;
-    overflow-y: auto;
-    max-height: 100%;
+    overflow-y: visible;
+    max-height: none;
     align-items: stretch;
 }
 
@@ -838,6 +921,7 @@ body{
     flex-grow: 1;
     display: flex;
     flex-direction: column;
+    height: 100%;
 }
 
 .weather-card.main-card{
@@ -847,10 +931,11 @@ body{
     backdrop-filter: blur(5px);
     border: 1px solid rgba(255,255,255,0.1);
     position: relative;
-    overflow-x: hidden;
+    overflow: visible;
     display: flex;
     flex-direction: column;
     height: 100%;
+    min-height: 600px;
 }
 
 .weather-card.main-card > div {
@@ -866,12 +951,6 @@ body{
     margin-bottom: 15px !important;
 }
 
-/* Reset weather details container */
-.details-container {
-    margin-top: 0;
-    flex-grow: 0;
-}
-
 .weather-card.main-card .card-title {
     margin-bottom: 0;
     font-size: 1.5rem;
@@ -881,7 +960,7 @@ body{
 /* 天气头部容器 - 一个靠左一个靠右 */
 .weather-card.main-card .weather-header {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
     margin-bottom: 15px;
     width: 100%;
@@ -897,12 +976,20 @@ body{
     font-weight: 600;
     display: flex;
     align-items: center;
-    gap: 10px;
+    justify-content: space-between;
     margin: 0;
     padding: 0;
     line-height: inherit;
     vertical-align: middle;
     height: 100%;
+    width: 100%;
+}
+
+.weather-card.main-card .weather-title .title-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
 }
 
 /* 当前日期样式 */
@@ -915,8 +1002,9 @@ body{
     vertical-align: middle;
     display: flex;
     align-items: center;
-    justify-content: center;
-    height: 100%;
+    justify-content: flex-end;
+    height: auto;
+    flex-shrink: 0;
 }
 
 .weather-icon{
@@ -982,41 +1070,11 @@ body{
     font-size: 1.1rem;
 }
 
-/* 当前日期样式 - 定位在卡片右上角 */
-.current-date {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    font-size: 1rem;
-    opacity: 0.8;
-    color: white;
-    font-weight: 500;
-}
-
 .details-container {
-    overflow-y: auto;
-    margin-top: 20px;
+    overflow-y: visible;
+    margin-top: auto;
     border-radius: 10px;
-    padding-right: 10px;
-}
-
-/* 详情滚动条样式 */
-.details-container::-webkit-scrollbar {
-    width: 8px;
-}
-
-.details-container::-webkit-scrollbar-track {
-    background: rgba(255,255,255,0.1);
-    border-radius: 10px;
-}
-
-.details-container::-webkit-scrollbar-thumb {
-    background: rgba(255,255,255,0.2);
-    border-radius: 10px;
-}
-
-.details-container::-webkit-scrollbar-thumb:hover {
-    background: rgba(255,255,255,0.3);
+    padding-right: 0;
 }
 
 .details{
@@ -1034,17 +1092,35 @@ body{
     padding: 10px 15px;
     border-radius: 10px;
     min-width: 0;
-    word-break: break-word;
+    white-space: nowrap;
     width: 100%;
     transition: all 0.2s ease;
+    font-size: 0.9rem;
 }
 
 .detail-item span {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    overflow: visible;
     flex: 1;
     min-width: 0;
+}
+
+/* 确保日出日落元素及其父容器可见 */
+.detail-item #sunrise,
+.detail-item #sunset {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    z-index: 1000 !important;
+    position: relative !important;
+}
+
+/* 确保日出日落的父容器可见 */
+.detail-item:has(#sunrise),
+.detail-item:has(#sunset) {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    z-index: 999 !important;
 }
 
 .detail-item i{
@@ -1052,13 +1128,7 @@ body{
     flex-shrink: 0;
     width: 20px;
     text-align: center;
-}
-
-.detail-item span {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    flex: 1;
+    font-size: 1rem;
 }
 
 /* 大屏幕网格布局 */

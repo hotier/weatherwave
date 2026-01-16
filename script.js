@@ -182,10 +182,69 @@ function hideLoading() {
     DOM_ELEMENTS.loadingOverlay.classList.remove('active');
 }
 
+// 确保日出日落元素可见
+function ensureSunriseSunsetVisible() {
+    console.log('ensureSunriseSunsetVisible called');
+    
+    // 检查并确保DOM元素已初始化
+    if (!DOM_ELEMENTS.sunrise || !DOM_ELEMENTS.sunset) {
+        console.log('Sunrise/Sunset elements not found in DOM_ELEMENTS');
+        // 尝试重新获取这些元素
+        const sunriseEl = document.getElementById('sunrise');
+        const sunsetEl = document.getElementById('sunset');
+        
+        if (sunriseEl) {
+            DOM_ELEMENTS.sunrise = sunriseEl;
+            console.log('Re-acquired sunrise element:', sunriseEl);
+        }
+        
+        if (sunsetEl) {
+            DOM_ELEMENTS.sunset = sunsetEl;
+            console.log('Re-acquired sunset element:', sunsetEl);
+        }
+    }
+    
+    // 确保元素可见
+    if (DOM_ELEMENTS.sunrise) {
+        console.log('Ensuring sunrise element is visible');
+        DOM_ELEMENTS.sunrise.style.display = 'block';
+        DOM_ELEMENTS.sunrise.style.visibility = 'visible';
+        DOM_ELEMENTS.sunrise.style.opacity = '1';
+        DOM_ELEMENTS.sunrise.style.zIndex = '1000';
+        
+        // 确保父容器可见
+        const sunriseParent = DOM_ELEMENTS.sunrise.parentElement;
+        if (sunriseParent) {
+            sunriseParent.style.display = 'flex';
+            sunriseParent.style.visibility = 'visible';
+            sunriseParent.style.opacity = '1';
+        }
+    }
+    
+    if (DOM_ELEMENTS.sunset) {
+        console.log('Ensuring sunset element is visible');
+        DOM_ELEMENTS.sunset.style.display = 'block';
+        DOM_ELEMENTS.sunset.style.visibility = 'visible';
+        DOM_ELEMENTS.sunset.style.opacity = '1';
+        DOM_ELEMENTS.sunset.style.zIndex = '1000';
+        
+        // 确保父容器可见
+        const sunsetParent = DOM_ELEMENTS.sunset.parentElement;
+        if (sunsetParent) {
+            sunsetParent.style.display = 'flex';
+            sunsetParent.style.visibility = 'visible';
+            sunsetParent.style.opacity = '1';
+        }
+    }
+}
+
 // 初始化应用
 function initApp() {
     // 初始化DOM元素
     initDOMElements();
+    
+    // 确保日出日落元素可见
+    ensureSunriseSunsetVisible();
     
     // 添加事件监听器
     DOM_ELEMENTS.searchBtn.addEventListener('click', searchCity);
@@ -737,9 +796,18 @@ async function fetchCurrentWeather(location) {
 
 // 获取5天预报
 async function fetchForecast(location) {
+    // 根据和风天气API文档，日出日落时间的标准字段名称是sunrise和sunset
     const url = `https://${API_CONFIG.host}/v7/weather/7d?location=${location}`;
     try {
         const data = await fetchWithCache(url);
+        console.log('API返回的预报数据:', data);
+        
+        if (data.daily && data.daily.length > 0) {
+            const dayData = data.daily[0];
+            console.log('第一天的完整预报数据:', dayData);
+            console.log('日出时间(sunrise):', dayData.sunrise);
+            console.log('日落时间(sunset):', dayData.sunset);
+        }
         return data.daily;
     } catch (error) {
         console.error('获取5天预报失败:', error);
@@ -960,6 +1028,12 @@ function displayCurrentWeather(weatherData, forecastData = null) {
     DOM_ELEMENTS.visibility.textContent = `能见度 ${now.vis}米`;
     DOM_ELEMENTS.clouds.textContent = `云量 ${now.cloud || '--'}%`;
     
+    // 尝试从forecastData中获取日出日落时间（如果可用）
+    if (forecastData && forecastData.length > 0) {
+        const today = forecastData[0];
+        displaySunriseSunset(today);
+    }
+    
     // 设置天气图标（使用和风天气官方图标库，失败时使用Font Awesome备用）
     try {
         const iconCode = now.icon || '100';
@@ -975,6 +1049,21 @@ function displayCurrentWeather(weatherData, forecastData = null) {
         console.error('设置天气图标失败:', error);
         // 直接使用Font Awesome默认图标
         DOM_ELEMENTS.mainIcon.innerHTML = `<i class="${WEATHER_ICON_MAPPING['default']}"></i>`;
+    }
+    
+    // 移除details容器中可能存在的日期detail-item
+    const detailsContainer = document.querySelector('.details');
+    if (detailsContainer) {
+        // 查找所有包含日期相关内容的detail-item并移除
+        const detailItems = detailsContainer.querySelectorAll('.detail-item');
+        detailItems.forEach(item => {
+            const text = item.textContent || '';
+            // 只移除真正的日期项目，避免移除日出日落项目
+            if (text.includes('2026') || text.includes('周五') || text.includes('日期') || 
+                (text.includes('年') && text.includes('月') && text.includes('日'))) {
+                item.remove();
+            }
+        });
     }
 }
 
@@ -1535,8 +1624,51 @@ function createForecastCard(dayData) {
 
 // 显示日出日落信息
 function displaySunriseSunset(dayData) {
-    DOM_ELEMENTS.sunrise.textContent = `日出 ${dayData.sunrise}`;
-    DOM_ELEMENTS.sunset.textContent = `日落 ${dayData.sunset}`;
+    console.log('displaySunriseSunset called with:', dayData);
+    
+    // 检查DOM元素是否存在
+    console.log('DOM_ELEMENTS.sunrise exists:', !!DOM_ELEMENTS.sunrise);
+    console.log('DOM_ELEMENTS.sunset exists:', !!DOM_ELEMENTS.sunset);
+    
+    if (DOM_ELEMENTS.sunrise) {
+        console.log('Sunrise element:', DOM_ELEMENTS.sunrise);
+        console.log('Sunrise element parent:', DOM_ELEMENTS.sunrise.parentElement);
+        console.log('Sunrise element display:', window.getComputedStyle(DOM_ELEMENTS.sunrise).display);
+        console.log('Sunrise element visibility:', window.getComputedStyle(DOM_ELEMENTS.sunrise).visibility);
+        console.log('Sunrise element opacity:', window.getComputedStyle(DOM_ELEMENTS.sunrise).opacity);
+    }
+    
+    if (DOM_ELEMENTS.sunset) {
+        console.log('Sunset element:', DOM_ELEMENTS.sunset);
+        console.log('Sunset element parent:', DOM_ELEMENTS.sunset.parentElement);
+        console.log('Sunset element display:', window.getComputedStyle(DOM_ELEMENTS.sunset).display);
+        console.log('Sunset element visibility:', window.getComputedStyle(DOM_ELEMENTS.sunset).visibility);
+        console.log('Sunset element opacity:', window.getComputedStyle(DOM_ELEMENTS.sunset).opacity);
+    }
+    
+    // 确保dayData存在
+    if (dayData) {
+        // 根据和风天气API文档，标准字段名称是sunrise和sunset
+        const sunriseTime = dayData.sunrise || '--';
+        const sunsetTime = dayData.sunset || '--';
+        
+        console.log('Setting sunrise to:', sunriseTime);
+        console.log('Setting sunset to:', sunsetTime);
+        
+        // 设置显示内容
+        if (DOM_ELEMENTS.sunrise) {
+            DOM_ELEMENTS.sunrise.textContent = `日出 ${sunriseTime}`;
+            console.log('After setting sunrise text:', DOM_ELEMENTS.sunrise.textContent);
+        }
+        if (DOM_ELEMENTS.sunset) {
+            DOM_ELEMENTS.sunset.textContent = `日落 ${sunsetTime}`;
+            console.log('After setting sunset text:', DOM_ELEMENTS.sunset.textContent);
+        }
+    } else {
+        console.log('No dayData provided to displaySunriseSunset');
+        if (DOM_ELEMENTS.sunrise) DOM_ELEMENTS.sunrise.textContent = `日出：--`;
+        if (DOM_ELEMENTS.sunset) DOM_ELEMENTS.sunset.textContent = `日落：--`;
+    }
 }
 
 
@@ -2214,16 +2346,27 @@ function generateWarmMessage(weatherDesc) {
 
 // 根据天气状况选择背景图片类名
 function getWeatherBackgroundClass(weatherDesc) {
+    // 随机选择1-4中的一个数字
+    const randomNumber = Math.floor(Math.random() * 4) + 1;
+    
     if (weatherDesc.includes('晴')) {
-        return 'sunny';
+        return `sunny${randomNumber > 1 ? `-${randomNumber}` : ''}`;
     } else if (weatherDesc.includes('云')) {
-        return 'cloudy';
+        return `cloudy${randomNumber > 1 ? `-${randomNumber}` : ''}`;
     } else if (weatherDesc.includes('雨')) {
-        return 'rainy';
+        return `rainy${randomNumber > 1 ? `-${randomNumber}` : ''}`;
     } else if (weatherDesc.includes('雪')) {
-        return 'snowy';
+        return `snowy${randomNumber > 1 ? `-${randomNumber}` : ''}`;
+    } else if (weatherDesc.includes('阴')) {
+        return `overcast${randomNumber > 1 ? `-${randomNumber}` : ''}`; // 阴天使用专门的阴天背景
+    } else if (weatherDesc.includes('雾') || weatherDesc.includes('霾')) {
+        return `foggy${randomNumber > 1 ? `-${randomNumber}` : ''}`; // 雾/霾天使用专门的雾天背景
     } else {
-        return 'default';
+        // 如果没有匹配到任何天气类型，随机返回一种天气背景类
+        const weatherTypes = ['sunny', 'cloudy', 'rainy', 'snowy', 'overcast', 'foggy'];
+        const randomWeather = weatherTypes[Math.floor(Math.random() * weatherTypes.length)];
+        const randomNumber = Math.floor(Math.random() * 4) + 1;
+        return `${randomWeather}${randomNumber > 1 ? `-${randomNumber}` : ''}`;
     }
 }
 
@@ -2445,8 +2588,7 @@ function randomBackground() {
         'rainy', 'rainy-2', 'rainy-3',
         // 雪天背景
         'snowy', 'snowy-2', 'snowy-3',
-        // 默认背景
-        'default', 'default-2', 'default-3', 'default-4', 'default-5'
+        
     ];
     // 随机选择一个背景类型
     const randomBg = bgTypes[Math.floor(Math.random() * bgTypes.length)];
