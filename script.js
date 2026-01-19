@@ -99,71 +99,74 @@ const DEFAULT_WEATHER_ICON = 'qi-0'; // 默认图标：晴天
 // 作为QWeather图标库失效时的备用方案
 const WEATHER_ICON_MAPPING = {
     // 晴天
-    '100': 'fas fa-sun',
-    '150': 'fas fa-moon',
+    '100': 'qi-100',
+    '150': 'qi-150',
     // 多云
-    '101': 'fas fa-cloud-sun',
-    '102': 'fas fa-cloud-sun',
-    '103': 'fas fa-cloud',
-    '104': 'fas fa-cloud',
-    '151': 'fas fa-cloud-moon',
-    '152': 'fas fa-cloud-moon',
-    '153': 'fas fa-cloud',
+    '101': 'qi-101',
+    '102': 'qi-102',
+    '103': 'qi-103',
+    '104': 'qi-104',
+    '151': 'qi-151',
+    '152': 'qi-152',
+    '153': 'qi-153',
     // 雨天
-    '300': 'fas fa-cloud-showers-heavy',
-    '301': 'fas fa-cloud-rain',
-    '302': 'fas fa-cloud-bolt',
-    '303': 'fas fa-cloud-bolt',
-    '304': 'fas fa-cloud-bolt',
-    '305': 'fas fa-cloud-rain',
-    '306': 'fas fa-cloud-rain',
-    '307': 'fas fa-cloud-showers-heavy',
-    '308': 'fas fa-cloud-showers-heavy',
-    '309': 'fas fa-cloud-drizzle',
-    '310': 'fas fa-cloud-drizzle',
-    '311': 'fas fa-cloud-drizzle',
-    '312': 'fas fa-cloud-drizzle',
-    '313': 'fas fa-cloud-rain',
-    '314': 'fas fa-cloud-showers-heavy',
-    '315': 'fas fa-cloud-rain',
-    '316': 'fas fa-cloud-rain',
-    '317': 'fas fa-cloud-showers-heavy',
-    '318': 'fas fa-cloud-showers-heavy',
-    '350': 'fas fa-cloud-drizzle',
-    '351': 'fas fa-cloud-drizzle',
-    '399': 'fas fa-cloud-rain',
+    '300': 'qi-300',
+    '301': 'qi-301',
+    '302': 'qi-302',
+    '303': 'qi-303',
+    '304': 'qi-304',
+    '305': 'qi-305',
+    '306': 'qi-306',
+    '307': 'qi-307',
+    '308': 'qi-308',
+    '309': 'qi-309',
+    '310': 'qi-310',
+    '311': 'qi-311',
+    '312': 'qi-312',
+    '313': 'qi-313',
+    '314': 'qi-314',
+    '315': 'qi-315',
+    '316': 'qi-316',
+    '317': 'qi-317',
+    '318': 'qi-318',
+    '350': 'qi-350',
+    '351': 'qi-351',
+    '399': 'qi-399',
     // 雪天
-    '400': 'fas fa-snowflake',
-    '401': 'fas fa-snowflake',
-    '402': 'fas fa-snowflake',
-    '403': 'fas fa-snowflake',
-    '404': 'fas fa-cloud-snow',
-    '405': 'fas fa-cloud-snow',
-    '406': 'fas fa-cloud-snow',
-    '407': 'fas fa-snowflake',
-    '408': 'fas fa-snowflake',
-    '409': 'fas fa-snowflake',
-    '410': 'fas fa-snowflake',
-    '456': 'fas fa-cloud-snow',
-    '457': 'fas fa-cloud-snow',
-    '499': 'fas fa-snowflake',
+    '400': 'qi-400',
+    '401': 'qi-401',
+    '402': 'qi-402',
+    '403': 'qi-403',
+    '404': 'qi-404', // 雨夹雪
+    '405': 'qi-405', // 雨雪天气
+    '406': 'qi-406', // 阵雨夹雪
+    '407': 'qi-407',
+    '408': 'qi-408',
+    '409': 'qi-409',
+    '410': 'qi-410',
+    '456': 'qi-456', // 阵雨夹雪（夜间）
+    '457': 'qi-457',
+    '499': 'qi-499',
     // 雾/霾
-    '500': 'fas fa-smog',
-    '501': 'fas fa-smog',
-    '502': 'fas fa-smog',
-    '503': 'fas fa-wind',
-    '504': 'fas fa-wind',
-    '507': 'fas fa-wind',
-    '508': 'fas fa-wind',
-    '509': 'fas fa-smog',
-    '510': 'fas fa-smog',
-    '511': 'fas fa-smog',
-    '512': 'fas fa-smog',
-    '513': 'fas fa-smog',
-    '514': 'fas fa-smog',
-    '515': 'fas fa-smog',
+    '500': 'qi-500',
+    '501': 'qi-501',
+    '502': 'qi-502',
+    '503': 'qi-503',
+    '504': 'qi-504',
+    '507': 'qi-507',
+    '508': 'qi-508',
+    '509': 'qi-509',
+    '510': 'qi-510',
+    '511': 'qi-511',
+    '512': 'qi-512',
+    '513': 'qi-513',
+    '514': 'qi-514',
+    '515': 'qi-515',
+    // 温度
+    '900': 'qi-900',
+    '901': 'qi-901',
     // 默认
-    'default': 'fas fa-cloud'
+    'default': 'qi-104'
 };
 
 // 搜索历史配置
@@ -1034,20 +1037,19 @@ function displayCurrentWeather(weatherData, forecastData = null) {
         displaySunriseSunset(today);
     }
     
-    // 设置天气图标（使用和风天气官方图标库，失败时使用Font Awesome备用）
+    // 设置天气图标（使用和风天气官方图标库）
     try {
         const iconCode = now.icon || '100';
         // 确保图标代码是字符串，以便用作映射键
         const iconStr = iconCode.toString();
-        // 尝试获取Font Awesome图标作为备用
-        const fallbackIcon = WEATHER_ICON_MAPPING[iconStr] || WEATHER_ICON_MAPPING['default'];
+        // 获取和风天气图标
+        const iconClass = WEATHER_ICON_MAPPING[iconStr] || WEATHER_ICON_MAPPING['default'];
         
-        // 使用Font Awesome图标作为主要解决方案，因为QWeather图标字体文件缺失
-        DOM_ELEMENTS.mainIcon.innerHTML = `<i class="${fallbackIcon}"></i>`;
-        console.log('当前天气图标:', fallbackIcon);
+        DOM_ELEMENTS.mainIcon.innerHTML = `<i class="${iconClass}"></i>`;
+        console.log('当前天气图标:', iconClass);
     } catch (error) {
         console.error('设置天气图标失败:', error);
-        // 直接使用Font Awesome默认图标
+        // 直接使用默认图标
         DOM_ELEMENTS.mainIcon.innerHTML = `<i class="${WEATHER_ICON_MAPPING['default']}"></i>`;
     }
     
@@ -1589,21 +1591,19 @@ function createForecastCard(dayData) {
         formattedDate = '?';
     }
     
-    // 天气图标（使用和风天气官方图标库，失败时使用Font Awesome备用）
+    // 天气图标（使用和风天气官方图标库）
     let iconClass = DEFAULT_WEATHER_ICON;
     try {
         const iconCode = dayData.iconDay || '100';
         // 确保图标代码是字符串，以便用作映射键
         const iconStr = iconCode.toString();
-        // 尝试获取Font Awesome图标作为备用
-        const fallbackIcon = WEATHER_ICON_MAPPING[iconStr] || WEATHER_ICON_MAPPING['default'];
+        // 获取和风天气图标
+        iconClass = WEATHER_ICON_MAPPING[iconStr] || WEATHER_ICON_MAPPING['default'];
         
-        // 使用Font Awesome图标作为主要解决方案，因为QWeather图标字体文件缺失
-        iconClass = fallbackIcon;
         console.log('预报天气图标:', iconClass, '图标代码:', iconCode);
     } catch (error) {
         console.error('设置预报天气图标失败:', error);
-        // 直接使用Font Awesome默认图标
+        // 直接使用默认图标
         iconClass = WEATHER_ICON_MAPPING['default'];
     }
     
@@ -1801,11 +1801,11 @@ function displayHourlyForecast(hourlyData) {
         const hourTime = new Date(hour.fxTime);
         const formattedHour = hourTime.getHours().toString().padStart(2, '0');
         
-        // 获取天气图标（使用Font Awesome，因为QWeather字体文件缺失）
+        // 获取天气图标（使用和风天气官方图标库）
         let iconClass;
         try {
             const iconCode = hour.icon || '100';
-            // 使用图标映射获取Font Awesome图标类名
+            // 获取和风天气图标类名
             iconClass = WEATHER_ICON_MAPPING[iconCode] || WEATHER_ICON_MAPPING['default'];
         } catch (error) {
             console.error('设置逐小时天气图标失败:', error);
