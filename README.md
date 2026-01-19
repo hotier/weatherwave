@@ -51,7 +51,7 @@ skycast 是一个基于和风天气 API 开发的现代化天气仪表盘，提�
 ```javascript
 // 和风天气API配置
 const API_CONFIG = {
-    host: '您的api_host', // 您的和风天气API主机
+    host: '您的API_HOST', // 您的和风天气API主机
     key: '您的API密钥'
 };
 ```
