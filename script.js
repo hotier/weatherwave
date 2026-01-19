@@ -2592,8 +2592,10 @@ function randomBackground() {
     ];
     // 随机选择一个背景类型
     const randomBg = bgTypes[Math.floor(Math.random() * bgTypes.length)];
-    // 应用背景
+    // 应用背景到预览卡片
     DOM_ELEMENTS.previewCard.className = `share-card ${randomBg}`;
+    // 同时应用背景到隐藏的分享卡片（用于生成图片）
+    DOM_ELEMENTS.shareCard.className = `share-card ${randomBg}`;
 }
 
 // 随机留言
